@@ -1,1 +1,1 @@
-CS50 Introductin to computer science all solutions.
+CS50 Introduction to computer science all solutions.
