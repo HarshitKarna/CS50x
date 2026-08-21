@@ -1,7 +1,9 @@
-//   #
-//  ##
-// ###
-// till height n
+/*
+   #
+  ##
+ ###
+ till height n 
+*/
 
 #include<stdio.h>
 
