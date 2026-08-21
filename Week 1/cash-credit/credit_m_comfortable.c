@@ -1,5 +1,5 @@
 /*
-This program checks whether a credit card number is valid using Luhn’s algorithm and verifies whether it matches the format of an American Express, MasterCard, or Visa card. It reads the card number, applies the checksum, checks its length and starting digits, and prints AMEX, MASTERCARD, VISA, or INVALID.
+Program to check whether an inputted number is a valid credit card number among the american express, mastercard or visa. The rules for checking is explained in the context below.
 
 CONTEXT
 
