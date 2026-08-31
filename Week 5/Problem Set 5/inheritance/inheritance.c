@@ -1,6 +1,4 @@
 // Simulate genetic inheritance of blood type
-#define _DEFAULT_SOURCE
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -19,11 +17,12 @@ person *create_family(int generations);
 void print_family(person *p, int generation);
 void free_family(person *p);
 char random_allele();
+char random_parent_allele(char alleles[2]);
 
 int main(void)
 {
     // Seed random number generator
-    srandom(time(0));
+    srand(time(0));
 
     // Create a new family with three generations
     person *p = create_family(GENERATIONS);
@@ -38,7 +37,12 @@ int main(void)
 // Create a new individual with `generations`
 person *create_family(int generations)
 {
-    // TODO: Allocate memory for new person
+    // Allocate memory for new person
+    person *child = malloc(sizeof(person));
+    if (child == NULL)
+    {
+        return NULL;
+    }
 
     // If there are still generations left to create
     if (generations > 1)
@@ -47,31 +51,50 @@ person *create_family(int generations)
         person *parent0 = create_family(generations - 1);
         person *parent1 = create_family(generations - 1);
 
-        // TODO: Set parent pointers for current person
+        // Set parent pointers for current person
+        child->parents[0] = parent0;
+        child->parents[1] = parent1;
 
-        // TODO: Randomly assign current person's alleles based on the alleles of their parents
+        // Randomly assign current person's alleles based on the alleles of their parents
+        child->alleles[0] = random_parent_allele(parent0->alleles);
+        child->alleles[1] = random_parent_allele(parent1->alleles);
     }
-
     // If there are no generations left to create
     else
     {
-        // TODO: Set parent pointers to NULL
+        // Set parent pointers to NULL
+        child->parents[0] = NULL;
+        child->parents[1] = NULL;
 
-        // TODO: Randomly assign alleles
+        // Randomly assign alleles
+        child->alleles[0] = random_allele();
+        child->alleles[1] = random_allele();
     }
 
-    // TODO: Return newly created person
-    return NULL;
+    // Return newly created person
+    return child;
+}
+
+char random_parent_allele(char alleles[2])
+{
+    return alleles[rand() % 2];
 }
 
 // Free `p` and all ancestors of `p`.
 void free_family(person *p)
 {
-    // TODO: Handle base case
+    // Handle base case
+    if (p == NULL)
+    {
+        return;
+    }
 
-    // TODO: Free parents recursively
+    // Free parents recursively
+    free_family(p->parents[0]);
+    free_family(p->parents[1]);
 
-    // TODO: Free child
+    // Free Child
+    free(p);
 }
 
 // Print each family member and their alleles.
@@ -115,17 +138,6 @@ void print_family(person *p, int generation)
 // Randomly chooses a blood type allele.
 char random_allele()
 {
-    int r = random() % 3;
-    if (r == 0)
-    {
-        return 'A';
-    }
-    else if (r == 1)
-    {
-        return 'B';
-    }
-    else
-    {
-        return 'O';
-    }
+    char alleles[] = {'A', 'B', 'O'};
+    return alleles[rand() % 3];
 }
