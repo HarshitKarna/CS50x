@@ -2,21 +2,6 @@ import csv
 import sys
 
 
-def main():
-
-    # TODO: Check for command-line usage
-
-    # TODO: Read database file into a variable
-    
-    # TODO: Read DNA sequence file into a variable
-
-    # TODO: Find longest match of each STR in DNA sequence
-
-    # TODO: Check database for matching profiles
-
-    return
-
-
 def longest_match(sequence, subsequence):
     """Returns length of longest run of subsequence in sequence."""
 
@@ -55,4 +40,46 @@ def longest_match(sequence, subsequence):
     return longest_run
 
 
-main()
+def main():
+
+    # Check for command-line usage
+    if len(sys.argv) != 3:
+        print("Incorrect use of command line. Usage: {program name} {database.csv} {sequence_file.txt}")
+        sys.exit(1)
+
+    # Read database file into a variable
+    with open(sys.argv[1], newline="") as csvfile:
+        reader = csv.DictReader(csvfile)
+        database = list(reader)   # converts csv reader into a list of dicts containing all the rows
+    
+    # Read DNA sequence file into a variable
+    with open(sys.argv[2], "r") as sequence_file:
+        sequence = sequence_file.read().strip()
+        
+    strs = reader.fieldnames[1:]   # excluding the name field/key
+
+    # Find longest match of each STR in DNA sequence
+    sequence_profile = {}
+    
+    for str_name in strs:
+        # gets a dict containing "XXXX": max_no_of_repeatsof_XXXX, adds another "YYYY": ... after, creating a sequence profile
+        sequence_profile[str_name] = longest_match(sequence, str_name)
+
+    # TODO: Check database for matching profiles
+    for person in database:
+        match = True
+        
+        for str_name in strs:
+            # making sure all str markers match, not just 1
+            if int(person[str_name]) != sequence_profile[str_name]:
+                match = False
+                break
+            
+        if match:
+            print(person["name"])
+            return
+    print("No match")
+
+
+if __name__ == "__main__":
+    main()

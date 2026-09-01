@@ -9,6 +9,14 @@
 # NOTE: it is also assumed that there aren't any grammatical errors in the program
 
 def text_details(text: str) -> tuple[int, int, int]:
+    """Returns numeric details on a text
+
+    Args:
+        text (str): long string, ideally a paragraph
+
+    Returns:
+        tuple[int, int, int]: (sentence_count, word_count, letter_count)
+    """
     sentence_count = sum(text.count(c) for c in ".?!")
     word_count = len(text.split())   # .split() returns list of substrings, i.e. a list of words separed by whitespace
     letter_count = sum(char.isalpha() for char in text)
