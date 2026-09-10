@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>
+                    What is the operating temperature of turbines in a commercial jet engine?
+                </h3>
+                <button type="button" value="1200">1200</button>
+                <button type="button" value="1300">1300</button>
+                <button type="button" value="1400">1400</button>
+                <button type="button" value="1500">1500</button>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>What country does the company "Porsche" originate from?</h3>
+                <form>
+                    <input autocomplete="off" placeholder="Country Name" id="free_response" type="text">
+                    <button type="submit">Check Answer</button>
+                </form>
+                <p id="verdict"></p>
+            </div>
+        </div>
+
+
+        <script>
+            let buttons = document.querySelectorAll('.section:first-child button');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    if (button.value == '1500')
+                    {
+                        button.style.backgroundColor = 'green';
+                    }
+                    else
+                    {
+                        button.style.backgroundColor = 'red';
+
+                        buttons.forEach(function(button) {
+                            if (button.value == '1500')
+                            {
+                                button.style.border = '3px solid green';
+                            }
+                        })
+                    }
+                    buttons.forEach(function(button) {
+                        button.disabled = true;
+                    });
+                });
+            });
+
+
+            document.querySelector('form').addEventListener('submit', 
+                function(event) {
+                    event.preventDefault();
+                    let country_name = document.querySelector('#free_response');
+                    if (country_name.value.trim().toLowerCase() === 'germany')
+                    {
+                        document.querySelector('#verdict').innerHTML = 'Correct!';
+                        country_name.style.border = '5px solid green';
+                    }
+                    else
+                    {
+                        document.querySelector('#verdict').innerHTML = 'Incorrect';
+                        country_name.style.border = '5px solid red';
+                    }
+                }
+            );
+        </script>
+    </body>
+</html>
