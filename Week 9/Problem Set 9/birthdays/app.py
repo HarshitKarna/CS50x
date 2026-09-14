@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, redirect, render_template, request
+from flask import Flask, flash, jsonify, redirect, render_template, request, session
 
 # Configure application
 app = Flask(__name__)
@@ -27,8 +27,8 @@ def after_request(response):
 def index():
     birthdays_conn = get_db()
     birthdays_cursor = birthdays_conn.cursor()
+    
     if request.method == "POST":
-
         # Add the user's entry into the database
         person_name = request.form.get("name")
         bday_month = int(request.form.get("month"))
@@ -47,11 +47,18 @@ def index():
 
         return redirect("/")
 
-    else:
+    elif request.args.get("api") == "true":
+            # returns json data when {root.url}/?api=true
+            birthdays_cursor.execute("SELECT * FROM birthdays")
+            people = [dict(row) for row in birthdays_cursor.fetchall()]   # so its a list of dict, where each dict/row is 1 id and its values
+            birthdays_conn.close()
 
+            return jsonify(people)
+    
+    else:
         # Display the entries in the database on index.html
         birthdays_cursor.execute("SELECT * FROM birthdays")
-        people = birthdays_cursor.fetchall()
+        people = [dict(row) for row in birthdays_cursor.fetchall()]
         
         birthdays_conn.close()
 
